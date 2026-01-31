@@ -63,6 +63,15 @@ body{font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--text)
 .tab{background:transparent;border:none;padding:8px 12px;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;color:var(--text-light)}
 .tab.active{color:var(--primary);border-bottom:2px solid var(--primary)}
 
+/* Ensure only the active tab's content is visible */
+.tab-content {
+  display: none;
+  margin-top: 10px
+}
+
+.tab-content.active {
+  display: block
+}
 .buttons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
 .speech-btn{background:var(--surface);border:1px solid var(--surface-light);border-radius:10px;padding:12px;font-size:15px;cursor:pointer;color:var(--text);transition:all .15s}
 .speech-btn:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--shadow)}

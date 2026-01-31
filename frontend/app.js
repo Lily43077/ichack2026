@@ -230,8 +230,10 @@ document.querySelectorAll('.tab').forEach(tab => {
     tab.classList.add('active');
     document.getElementById(tabName + 'Tab').classList.add('active');
 
-    // Clear generic buttons when switching to contextual tab
-    if (tabName === 'contextual') {
+    // Manage generic buttons visibility
+    if (tabName === 'generic') {
+      initGenericButtons();
+    } else if (tabName === 'contextual') {
       genericButtons.innerHTML = '';
     }
   });
