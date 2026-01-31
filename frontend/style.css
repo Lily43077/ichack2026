@@ -10,6 +10,8 @@
   --shadow: 0 4px 6px rgba(16,24,40,0.06);
   --shadow-lg: 0 12px 24px rgba(16,24,40,0.08);
   --success: #10B981;
+  --red: #dc2626;
+  --green: #22c55e;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -48,9 +50,10 @@ body{font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--text)
 .context-display-emoji{font-size:48px;margin-bottom:6px}
 .context-display-text{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:600;color:var(--text)}
 
-.record-btn{width:160px;height:160px;border-radius:50%;background:var(--primary);border:8px solid var(--surface);color:#fff;font-size:2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow)}
-.record-btn.recording{animation:pulse 2s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(17,17,17,0.08)}50%{box-shadow:0 0 0 10px rgba(17,17,17,0)}100%{box-shadow:0 0 0 0 rgba(17,17,17,0)}}
+.record-btn{width:160px;height:160px;border-radius:50%;background:var(--primary);border:8px solid var(--surface);color:#fff;font-size:2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);transition:all .2s}
+.record-btn:hover{transform:scale(1.05)}
+.record-btn.recording{animation:pulse 2s infinite;background:var(--red)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,0.12)}50%{box-shadow:0 0 0 15px rgba(220,38,38,0)}100%{box-shadow:0 0 0 0 rgba(220,38,38,0)}}
 
 .record-status{font-size:1rem;color:var(--text-light)}
 
@@ -61,21 +64,20 @@ body{font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--text)
 .tab.active{color:var(--primary);border-bottom:2px solid var(--primary)}
 
 .buttons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.speech-btn{background:var(--surface);border:1px solid var(--surface-light);border-radius:10px;padding:12px;font-size:15px;cursor:pointer;color:var(--text)}
+.speech-btn{background:var(--surface);border:1px solid var(--surface-light);border-radius:10px;padding:12px;font-size:15px;cursor:pointer;color:var(--text);transition:all .15s}
 .speech-btn:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--shadow)}
 
-.refresh-btn{padding:10px 12px;border-radius:10px;border:none;background:var(--accent);color:#fff;cursor:pointer}
-.refresh-btn:disabled{opacity:.6}
-
-/* top-left recording toggle */
-.recording-toggle-top{
-  position:fixed;top:14px;left:14px;width:56px;height:56px;border-radius:50%;background:var(--accent);border:none;color:white;box-shadow:var(--shadow-lg);cursor:pointer;z-index:60;
+/* bottom-right recording toggle (red by default, green when recording) */
+.recording-toggle-bottom{
+  position:fixed;bottom:28px;right:28px;width:80px;height:80px;border-radius:50%;background:var(--red);border:none;color:white;box-shadow:0 8px 24px rgba(220,38,38,0.3);cursor:pointer;z-index:60;font-size:0;display:flex;align-items:center;justify-content:center;transition:all .2s;
 }
-.recording-toggle-top.recording{background:#ef4444}
+.recording-toggle-bottom:hover{transform:scale(1.08);box-shadow:0 12px 32px rgba(220,38,38,0.4)}
+.recording-toggle-bottom.recording{background:var(--green);box-shadow:0 8px 24px rgba(34,197,94,0.3),0 0 0 0 rgba(34,197,94,0.5);animation:pulse-green 2s infinite}
+@keyframes pulse-green{0%{box-shadow:0 8px 24px rgba(34,197,94,0.3),0 0 0 0 rgba(34,197,94,0.5)}50%{box-shadow:0 8px 24px rgba(34,197,94,0.3),0 0 0 20px rgba(34,197,94,0)}100%{box-shadow:0 8px 24px rgba(34,197,94,0.3),0 0 0 0 rgba(34,197,94,0)}}
 
 /* circular back btn override for record screen */
-.back-btn.circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid var(--surface-light);background:var(--surface);box-shadow:var(--shadow);position:fixed;top:12px;left:12px;z-index:60}
-.back-btn{position:fixed;top:12px;left:12px;background:var(--surface);border:1px solid var(--surface-light);color:var(--text);width:auto;height:48px;padding:0 10px;border-radius:8px;display:flex;align-items:center;justify-content:center;z-index:50}
+.back-btn.circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid var(--surface-light);background:var(--surface);box-shadow:var(--shadow);position:fixed;top:12px;left:12px;z-index:60;cursor:pointer;color:var(--text)}
+.back-btn{position:fixed;top:12px;left:12px;background:var(--surface);border:1px solid var(--surface-light);color:var(--text);width:auto;height:48px;padding:0 10px;border-radius:8px;display:flex;align-items:center;justify-content:center;z-index:50;cursor:pointer}
 
 /* status */
 .status-bar{position:fixed;bottom:18px;left:18px;max-width:420px;background:var(--surface);border-radius:10px;padding:10px 12px;color:var(--text);box-shadow:var(--shadow-lg);z-index:100}
@@ -87,4 +89,5 @@ body{font-family:'Public Sans',sans-serif;background:var(--bg);color:var(--text)
   .context-grid{grid-template-columns:repeat(2,1fr)}
   .record-btn{width:140px;height:140px}
   .context-emoji{font-size:24px}
+  .recording-toggle-bottom{width:70px;height:70px;bottom:20px;right:20px}
 }

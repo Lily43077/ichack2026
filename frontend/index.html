@@ -48,8 +48,8 @@
   <div class="screen" id="speechScreen">
     <button class="back-btn" id="backFromSpeech">←</button>
 
-    <!-- Top-left recording toggle (start/stop any time) -->
-    <button id="recordingToggleTop" class="recording-toggle-top" title="Start/Stop Recording"></button>
+    <!-- Bottom-right recording button (no emoji) -->
+    <button id="recordingToggleBottom" class="recording-toggle-bottom" title="Start/Stop Recording"></button>
 
     <div class="header">
       <h1>💬 Speech Assistant</h1>
@@ -61,7 +61,6 @@
 
       <div class="speech-controls" style="display:flex;gap:10px;margin:12px 0;">
         <button id="stopResetBtn" class="btn-secondary">Stop & Reset Input</button>
-        <button id="refreshBtn" class="refresh-btn"><span>🔄</span><span>Refresh</span></button>
       </div>
 
       <div class="tabs">
@@ -75,10 +74,6 @@
 
       <div class="tab-content" id="contextualTab">
         <div class="buttons-grid" id="contextualButtons"></div>
-
-        <div class="refresh-container" style="margin-top:12px;">
-          <span class="refresh-text">Generate new contextual suggestions based on the conversation</span>
-        </div>
       </div>
     </div>
   </div>

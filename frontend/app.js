@@ -1,7 +1,7 @@
 const API_BASE = "http://127.0.0.1:8000";
 const sessionId = crypto.randomUUID ? crypto.randomUUID() : String(Date.now());
 
-// Predefined contexts (kept exactly)
+// Predefined contexts
 const CONTEXTS = [
   { emoji: '🏥', label: 'Medical', value: 'medical' },
   { emoji: '🍽️', label: 'Restaurant', value: 'restaurant' },
@@ -23,7 +23,8 @@ let isRecording = false;
 let transcript = '';
 let mediaRecorder = null;
 let audioChunks = [];
-let silenceTimer = null; // <-- auto-submit after 15s silence
+let silenceTimer = null;
+let wasResetPressed = false; // <-- track if reset was pressed
 
 // Elements
 const homeScreen = document.getElementById('homeScreen');
@@ -45,9 +46,8 @@ const transcriptDisplay = document.getElementById('transcriptDisplay');
 const genericButtons = document.getElementById('genericButtons');
 const contextualButtons = document.getElementById('contextualButtons');
 
-const refreshBtn = document.getElementById('refreshBtn');
 const statusBar = document.getElementById('statusBar');
-const recordingToggleTop = document.getElementById('recordingToggleTop');
+const recordingToggleBottom = document.getElementById('recordingToggleBottom');
 const recordResetBtn = document.getElementById('recordResetBtn');
 const stopResetBtn = document.getElementById('stopResetBtn');
 
@@ -94,7 +94,8 @@ startBtn.addEventListener('click', () => {
 // recording button on record screen -> go to speech screen and auto-start
 recordBtn.addEventListener('click', () => {
   showScreen('speech');
-  initGenericButtons();
+  wasResetPressed = false; // <-- reset the flag
+  initGenericButtons(); // <-- show generic buttons immediately
   setTimeout(() => toggleSpeechRecording(), 120);
 });
 
@@ -106,7 +107,7 @@ function stopAllRecognition() {
     if (mediaRecorder && mediaRecorder.stream && mediaRecorder.stream.getTracks) mediaRecorder.stream.getTracks().forEach(t => t.stop());
   } catch {}
   isRecording = false;
-  if (recordingToggleTop) recordingToggleTop.classList.remove('recording');
+  if (recordingToggleBottom) recordingToggleBottom.classList.remove('recording');
   clearTimeout(silenceTimer);
 }
 
@@ -116,35 +117,40 @@ function clearTranscriptUI() {
   recordStatus.textContent = '';
 }
 
-recordResetBtn?.addEventListener('click', () => {
+function fullReset() {
+  wasResetPressed = true; // <-- mark that reset was pressed
   stopAllRecognition();
   clearTranscriptUI();
+  recognition = null;
+}
+
+recordResetBtn?.addEventListener('click', () => {
+  fullReset();
   showStatus('Stopped and cleared');
 });
 
 stopResetBtn?.addEventListener('click', () => {
-  stopAllRecognition();
-  clearTranscriptUI();
+  fullReset();
   showStatus('Input stopped and cleared');
 });
 
-// 15s silence auto-submit
+// 3s silence auto-submit (but only if reset was NOT pressed)
 function resetSilenceTimer() {
   clearTimeout(silenceTimer);
   silenceTimer = setTimeout(() => {
-    if (transcript && transcript.trim().length > 0) {
-      showStatus('No speech detected for 15s — submitting input...', 'loading');
+    // Only auto-submit if reset wasn't pressed
+    if (!wasResetPressed && transcript && transcript.trim().length > 0) {
+      showStatus('Auto-submitting input...', 'loading');
       autoSubmitTranscript();
     }
   }, 3000);
 }
 
 async function autoSubmitTranscript() {
-  // fetch suggestions from backend and render in contextual tab
   try {
     const suggestions = await fetchSuggestions(transcript);
     renderContextualButtons(suggestions);
-    // switch to contextual tab
+    // Auto-switch to contextual tab
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     document.querySelector('.tab[data-tab="contextual"]').classList.add('active');
@@ -158,16 +164,14 @@ async function autoSubmitTranscript() {
 // Transcription & recording
 async function transcribeAudio(blob) {
   showStatus('Transcribing...', '');
-  // no server transcribe; keep current transcript
   showStatus('Transcription simulated', 'success');
 }
 
-recordingToggleTop?.addEventListener('click', toggleSpeechRecording);
+recordingToggleBottom?.addEventListener('click', toggleSpeechRecording);
 
 async function toggleSpeechRecording() {
   if (!SpeechRecognition) {
-    // fallback handled elsewhere
-    showStatus('SpeechRecognition not supported in this browser', 'error');
+    showStatus('SpeechRecognition not supported', 'error');
     return;
   }
 
@@ -180,9 +184,9 @@ async function toggleSpeechRecording() {
 
     recognition.onstart = () => {
       isRecording = true;
-      if (recordingToggleTop) recordingToggleTop.classList.add('recording');
+      wasResetPressed = false; // <-- clear flag when recording starts
+      if (recordingToggleBottom) recordingToggleBottom.classList.add('recording');
       showStatus('Recording...');
-      // reset silence timer as we just started
       resetSilenceTimer();
     };
 
@@ -195,7 +199,6 @@ async function toggleSpeechRecording() {
       }
       transcript = (finalTranscript + interim).trim();
       transcriptDisplay.textContent = transcript;
-      // each time we get speech, reset the silence timer
       resetSilenceTimer();
     };
 
@@ -205,9 +208,8 @@ async function toggleSpeechRecording() {
 
     recognition.onend = () => {
       isRecording = false;
-      if (recordingToggleTop) recordingToggleTop.classList.remove('recording');
+      if (recordingToggleBottom) recordingToggleBottom.classList.remove('recording');
       showStatus('Recording stopped');
-      // If recognition ended unexpectedly, still auto-submit if transcript present after short delay
       resetSilenceTimer();
     };
   }
@@ -250,22 +252,7 @@ function initGenericButtons() {
   });
 }
 
-// Refresh/contextual suggestions
-refreshBtn?.addEventListener('click', async () => {
-  refreshBtn.disabled = true;
-  refreshBtn.innerHTML = '<span class="loading-spinner"></span><span>Loading...</span>';
-  try {
-    const suggestions = await fetchSuggestions();
-    renderContextualButtons(suggestions);
-    showStatus('Suggestions refreshed', 'success');
-  } catch (e) {
-    showStatus('Failed to fetch suggestions', 'error');
-  } finally {
-    refreshBtn.disabled = false;
-    refreshBtn.innerHTML = '<span>🔄</span><span>Refresh</span>';
-  }
-});
-
+// Contextual suggestions
 async function fetchSuggestions() {
   const payload = { session_id: sessionId, last_text: transcript, context: selectedContext?.value || 'generic', mode: 'contextual' };
   const res = await fetch(`${API_BASE}/suggest`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -303,7 +290,7 @@ document.getElementById('backFromRecord').addEventListener('click', () => {
   showScreen('home');
 });
 document.getElementById('backFromSpeech').addEventListener('click', () => {
-  stopAllRecognition();
+  fullReset();
   showScreen('record');
 });
 
