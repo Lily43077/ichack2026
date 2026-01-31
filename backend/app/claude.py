@@ -1,37 +1,60 @@
 import os
+import re
 from anthropic import Anthropic
 
-client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+def _clean_lines(text: str) -> list[str]:
+    lines = []
+    for raw in text.split("\n"):
+        s = raw.strip()
+        if not s:
+            continue
+        # strip bullets
+        s = s.lstrip("-•").strip()
+        # strip numbering like "1." "1)" "1 -"
+        s = re.sub(r"^\d+\s*[\.\)\-:]\s*", "", s).strip()
 
-def generate_replies(message: str, context: str):
+        # hard cap words
+        words = s.split()
+        if len(words) > 18:
+            s = " ".join(words[:18])
+
+        if s:
+            lines.append(s)
+    return lines
+
+def generate_replies(message: str, context: str) -> list[str]:
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        raise RuntimeError("ANTHROPIC_API_KEY not set")
+
+    client = Anthropic(api_key=api_key)
+
     prompt = f"""
 Generate exactly 6 short reply options for a user to tap.
 
 Rules:
+- Exactly 6 replies
 - Each reply under 18 words
-- Polite and neutral
+- Polite, neutral, clear
 - No emojis
-- No numbering or bullets
+- No numbering, no bullet points
 - One reply per line
 
 Context: {context}
-Message: "{message}"
+Incoming message: "{message}"
 """
 
     res = client.messages.create(
         model="claude-3-haiku-20240307",
-        max_tokens=200,
+        max_tokens=220,
         temperature=0.6,
         messages=[{"role": "user", "content": prompt}],
     )
 
-    lines = []
-    for line in res.content[0].text.split("\n"):
-        line = line.strip().lstrip("-•0123456789. ").strip()
-        if line:
-            lines.append(line)
+    text = res.content[0].text.strip()
+    lines = _clean_lines(text)
 
     if len(lines) < 6:
-        raise ValueError("Claude output invalid")
+        raise ValueError(f"Claude returned <6 lines: {lines}")
 
     return lines[:6]

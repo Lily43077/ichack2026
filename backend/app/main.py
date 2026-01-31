@@ -1,17 +1,20 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
+
 from .routes import router
 from . import store
 
-load_dotenv()
 store.load()
 
-app = FastAPI()
+app = FastAPI(title="ichack2026-backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # hackathon mode; tighten later
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
