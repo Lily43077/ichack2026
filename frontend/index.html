@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quick Reply Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Quick Reply Assistant</h1>
+    <div class="row">
+      <label>
+        Context:
+        <select id="context">
+          <option value="generic">Generic</option>
+          <option value="transport">Transport</option>
+          <option value="cafe">Café</option>
+          <option value="doctor">Doctor</option>
+        </select>
+      </label>
+
+      <label class="toggle">
+        <input type="checkbox" id="ttsToggle" checked />
+        Speak replies
+      </label>
+
+      <label class="toggle">
+        <input type="checkbox" id="bigToggle" />
+        Big text
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <div id="chat" class="chat"></div>
+
+    <div class="composer">
+      <input id="msgInput" type="text" placeholder="Type a message…" />
+      <button id="sendBtn">Send</button>
+    </div>
+
+    <div id="status" class="status"></div>
+    <div id="suggestions" class="suggestions"></div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
