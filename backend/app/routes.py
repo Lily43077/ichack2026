@@ -4,6 +4,7 @@ from .intents import classify_intent
 from .phrasepacks import PHRASEPACKS
 from .claude import generate_replies
 from . import store
+from . import history
 
 router = APIRouter()
 
@@ -27,10 +28,22 @@ def suggest(req: SuggestReq):
     print(f"  Classified intent: {intent}")
     print("=" * 60)
 
+    # Get conversation history for this session
+    conversation_history = history.get_history_for_llm(req.session_id)
+    print(f"📜 Conversation history:\n{conversation_history}\n")
+
+    # Get commonly chosen replies for this context
+    common_replies = history.get_common_replies(context)
+    print(f"⭐ Common replies for {context}: {common_replies}")
+
+    # Store this exchange in history (without chosen reply yet)
+    if text:
+        history.add_exchange(req.session_id, context, text)
+
     # Prefer Claude always; fallback only if Claude fails
     try:
         print("🤖 Sending to Claude AI...")
-        replies = generate_replies(text, context)
+        replies = generate_replies(text, context, conversation_history, common_replies)
         print(f"✅ Claude generated {len(replies)} replies")
     except Exception as e:
         print("❌ Claude failed, using fallback:", repr(e))
@@ -64,6 +77,12 @@ def suggest(req: SuggestReq):
 def log_choice(req: LogChoiceReq):
     # Store chosen reply so it rises to the top over time
     print(f"📊 User chose: {repr(req.text)} (context: {req.context}, intent: {req.intent})")
+    
+    # Update weight for scoring
     store.bump(req.context, req.intent, req.text, delta=1)
     store.save()
+    
+    # Update conversation history with the chosen reply
+    history.update_last_exchange_with_choice(req.session_id, req.text)
+    
     return {"ok": True}

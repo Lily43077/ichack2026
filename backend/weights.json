@@ -12,5 +12,6 @@
   "medical||clarify||Please speak slowly.": 2,
   "medical||clarify||Can you show me on your phone?": 1,
   "medical||clarify||Do you mean this?": 2,
-  "medical||clarify||I understand a little\u2014please repeat.": 1
+  "medical||clarify||I understand a little\u2014please repeat.": 2,
+  "restaurant||generic||Could you type that?": 1
 }

@@ -22,15 +22,45 @@ def _clean_lines(text: str) -> list[str]:
             lines.append(s)
     return lines
 
-def generate_replies(message: str, context: str) -> list[str]:
+def generate_replies(message: str, context: str, conversation_history: str = "", common_replies: list[str] = None) -> list[str]:
+    """
+    Generate reply suggestions using Claude.
+    
+    Args:
+        message: The current transcript/message heard
+        context: The conversation context (medical, restaurant, etc.)
+        conversation_history: Formatted string of past exchanges
+        common_replies: List of replies that have worked well in this context
+    """
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
         raise RuntimeError("ANTHROPIC_API_KEY not set")
 
     client = Anthropic(api_key=api_key)
 
-    prompt = f"""
-Generate exactly 6 short reply options for a user to tap.
+    # Build the prompt with history context
+    history_section = ""
+    if conversation_history:
+        history_section = f"""
+Previous conversation:
+{conversation_history}
+
+Based on this conversation flow, generate contextually appropriate replies.
+"""
+
+    # Include common replies as hints
+    common_replies_section = ""
+    if common_replies:
+        common_replies_section = f"""
+Replies that have worked well in similar {context} situations:
+{', '.join(common_replies[:5])}
+
+Use these as inspiration but generate fresh, contextually appropriate options.
+"""
+
+    prompt = f"""You are helping generate reply options for a speech-assistance app. The user has difficulty speaking and needs quick tap-to-speak responses.
+
+Generate exactly 6 short reply options for the user to tap.
 
 Rules:
 - Exactly 6 replies
@@ -39,10 +69,17 @@ Rules:
 - No emojis
 - No numbering, no bullet points
 - One reply per line
+- Replies should be things the USER would say (not the other person)
+- Consider the conversation flow and what would be a natural next response
 
 Context: {context}
-Incoming message: "{message}"
-"""
+{history_section}
+{common_replies_section}
+Current message heard: "{message}"
+
+Generate 6 appropriate replies the user could say next:"""
+
+    print(f"📝 Prompt being sent to Claude:\n{prompt}\n")
 
     res = client.messages.create(
         model="claude-3-haiku-20240307",

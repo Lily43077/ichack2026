@@ -6,8 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .routes import router
 from . import store
+from . import history
 
 store.load()
+history.load()
 
 app = FastAPI(title="ichack2026-backend")
 

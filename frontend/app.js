@@ -230,17 +230,13 @@ async function toggleSpeechRecording() {
 async function sendTranscriptToBackend(text) {
   try {
     // Update the transcript state
-    transcript = text + ' ' + transcript;
+    transcript += text + ' ';
     console.log('📝 Total transcript accumulated:', transcript);
     console.log('📊 Transcript length:', transcript.length, 'characters');
     
     // Optionally auto-refresh contextual suggestions when new speech is detected
     // Uncomment the line below if you want automatic refresh
     // await autoRefreshSuggestions();
-
-    if (transcript.length > 500) {
-      transcript = transcript.substring(0, 500);
-    }
     
   } catch (error) {
     console.error('Failed to process transcript:', error);
@@ -319,10 +315,6 @@ async function fetchSuggestions() {
   console.log('✅ Backend response:', data);
   console.log('💬 Suggestions received:', data.suggestions.map(s => s.text));
   
-  // Clear transcript after successful send
-  transcript = '';
-  console.log('🧹 Transcript cleared');
-  
   return data.suggestions || [];
 }
 
@@ -394,6 +386,59 @@ function showStatus(message, type) {
   }, 3000);
 }
 
+// Custom reply functionality
+function setupCustomReply(inputId, buttonId) {
+  const input = document.getElementById(inputId);
+  const button = document.getElementById(buttonId);
+  
+  if (!input || !button) return;
+  
+  // Speak on button click
+  button.addEventListener('click', () => {
+    const text = input.value.trim();
+    if (text) {
+      speakPhrase(text);
+      // Log the custom reply as a choice
+      logCustomChoice(text);
+      // Clear the input after speaking
+      input.value = '';
+    } else {
+      showStatus('Please enter a reply first', 'error');
+    }
+  });
+  
+  // Also speak on Enter key
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      const text = input.value.trim();
+      if (text) {
+        speakPhrase(text);
+        logCustomChoice(text);
+        input.value = '';
+      }
+    }
+  });
+}
+
+async function logCustomChoice(text) {
+  try {
+    await fetch(`${API_BASE}/log_choice`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        session_id: sessionId,
+        suggestion_id: "custom",
+        context: selectedContext?.value || "generic",
+        intent: "custom",
+        text: text
+      })
+    });
+    console.log('📝 Custom reply logged:', text);
+  } catch (error) {
+    console.error('Failed to log custom choice:', error);
+  }
+}
+
 // Health check
 (async () => {
   try {
@@ -408,3 +453,7 @@ function showStatus(message, type) {
 
 // Initialize
 initContexts();
+
+// Setup custom reply inputs after DOM is ready
+setupCustomReply('customReplyContextual', 'orateContextual');
+setupCustomReply('customReplyGeneric', 'orateGeneric');
