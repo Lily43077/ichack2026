@@ -140,33 +140,6 @@ function fadeOutPreviousSentences() {
   });
 }
 
-// --- Live (interim) transcript line helpers ---
-let liveLineEl = null;
-
-function ensureLiveLine() {
-  if (!liveLineEl) {
-    liveLineEl = document.createElement('div');
-    liveLineEl.className = 'transcript-sentence user interim';
-    // Put it at the bottom (remember transcriptDisplay is column-reverse)
-    transcriptDisplay.insertBefore(liveLineEl, transcriptDisplay.firstChild);
-  }
-  return liveLineEl;
-}
-
-function setLiveTranscript(text) {
-  const el = ensureLiveLine();
-  el.textContent = text.trim();
-  // If empty, hide it (so placeholder can show when nothing else exists)
-  el.style.display = el.textContent ? 'block' : 'none';
-}
-
-function clearLiveTranscript() {
-  if (liveLineEl) {
-    liveLineEl.remove();
-    liveLineEl = null;
-  }
-}
-
 // Recording toggle on speech screen
 recordingToggle.addEventListener('click', toggleSpeechRecording);
 
@@ -183,41 +156,25 @@ if (SpeechRecognition) {
   let finalTranscript = '';
   let interimTranscript = '';
 
-recognition.onresult = (event) => {
-  let interim = '';
-  let finalText = '';
-
-  for (let i = event.resultIndex; i < event.results.length; i++) {
-    const text = event.results[i][0].transcript;
-    if (event.results[i].isFinal) finalText += text;
-    else interim += text;
-  }
-
-  // live update while speaking
-  setLiveTranscript(interim);
-
-  const cleanedFinal = finalText.trim();
-  if (!cleanedFinal) return;
-
-  // ✅ Promote the existing interim line to final instead of pushing again
-  if (liveLineEl) {
-    liveLineEl.textContent = cleanedFinal;
-    liveLineEl.classList.remove('interim');  // removes italics styling
-    // Optionally keep 'user' class; up to you
-    // liveLineEl.classList.add('user');
-
-    // Important: "finalize" it so the next interim creates a new live line
-    liveLineEl = null;
-  } else {
-    // fallback: if for some reason no live line exists, add normally
-    addTranscriptSentence(cleanedFinal, 'user');
-  }
-
-  // send to backend once (not duplicated)
-  sendTranscriptToBackend(cleanedFinal);
-};
-
-
+  recognition.onresult = (event) => {
+    interimTranscript = '';
+    
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      
+      if (event.results[i].isFinal) {
+        finalTranscript = transcript;
+        console.log('🎤 Speech recognized:', finalTranscript);
+        // Add the final transcription to the display
+        addTranscriptSentence(finalTranscript, 'user');
+        // Send to backend for contextual suggestions
+        sendTranscriptToBackend(finalTranscript);
+        finalTranscript = '';
+      } else {
+        interimTranscript += transcript;
+      }
+    }
+  };
 
   recognition.onerror = (event) => {
     console.error('Speech recognition error:', event.error);
@@ -262,7 +219,6 @@ async function toggleSpeechRecording() {
     if (recognition) {
       recognition.stop();
     }
-    clearLiveTranscript();
     isRecording = false;
     recordingToggle.classList.remove('recording');
     recordingToggle.classList.add('paused');
@@ -274,11 +230,17 @@ async function toggleSpeechRecording() {
 async function sendTranscriptToBackend(text) {
   try {
     // Update the transcript state
-    transcript += text + ' ';
-  
+    transcript = text + ' ' + transcript;
+    console.log('📝 Total transcript accumulated:', transcript);
+    console.log('📊 Transcript length:', transcript.length, 'characters');
+    
     // Optionally auto-refresh contextual suggestions when new speech is detected
     // Uncomment the line below if you want automatic refresh
     // await autoRefreshSuggestions();
+
+    if (transcript.length > 500) {
+      transcript = transcript.substring(0, 500);
+    }
     
   } catch (error) {
     console.error('Failed to process transcript:', error);
@@ -342,6 +304,9 @@ async function fetchSuggestions() {
     mode: "contextual"
   };
 
+  console.log('📤 Sending to backend:', payload);
+  console.log('📝 Transcript being sent:', transcript);
+
   const res = await fetch(`${API_BASE}/suggest`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -350,6 +315,14 @@ async function fetchSuggestions() {
 
   if (!res.ok) throw new Error('Suggest failed');
   const data = await res.json();
+  
+  console.log('✅ Backend response:', data);
+  console.log('💬 Suggestions received:', data.suggestions.map(s => s.text));
+  
+  // Clear transcript after successful send
+  transcript = '';
+  console.log('🧹 Transcript cleared');
+  
   return data.suggestions || [];
 }
 

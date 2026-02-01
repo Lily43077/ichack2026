@@ -1,0 +1,16 @@
+{
+  "medical||emergency||Please call 999.": 6,
+  "medical||emergency||Please call emergency services.": 5,
+  "medical||emergency||I am not feeling well.": 4,
+  "medical||emergency||I need a doctor.": 3,
+  "medical||emergency||I need help.": 5,
+  "medical||emergency||I am lost\u2014can you help me?": 6,
+  "medical||generic||Please repeat.": 1,
+  "medical||generic||One moment.": 1,
+  "medical||clarify||Sorry, can you rephrase?": 1,
+  "medical||clarify||Could you type that again?": 2,
+  "medical||clarify||Please speak slowly.": 2,
+  "medical||clarify||Can you show me on your phone?": 1,
+  "medical||clarify||Do you mean this?": 2,
+  "medical||clarify||I understand a little\u2014please repeat.": 1
+}

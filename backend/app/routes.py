@@ -17,11 +17,23 @@ def suggest(req: SuggestReq):
     context = req.context or "generic"
     intent = classify_intent(text)
 
+    # LOG: Print received transcript
+    print("=" * 60)
+    print("📥 RECEIVED REQUEST:")
+    print(f"  Session ID: {req.session_id}")
+    print(f"  Context: {context}")
+    print(f"  Transcript: {repr(text)}")
+    print(f"  Transcript length: {len(text)} characters")
+    print(f"  Classified intent: {intent}")
+    print("=" * 60)
+
     # Prefer Claude always; fallback only if Claude fails
     try:
+        print("🤖 Sending to Claude AI...")
         replies = generate_replies(text, context)
+        print(f"✅ Claude generated {len(replies)} replies")
     except Exception as e:
-        print("Claude failed, using fallback:", repr(e))
+        print("❌ Claude failed, using fallback:", repr(e))
         replies = _fallback(intent)
 
     # Rank by emergent weights
@@ -32,6 +44,11 @@ def suggest(req: SuggestReq):
         scored.append((score, r))
 
     scored.sort(reverse=True, key=lambda x: x[0])
+
+    print("\n📤 SENDING RESPONSE:")
+    for i, (score, reply_text) in enumerate(scored[:6]):
+        print(f"  {i+1}. [{score:.2f}] {reply_text}")
+    print("=" * 60 + "\n")
 
     return SuggestRes(suggestions=[
         SuggestItem(
@@ -46,6 +63,7 @@ def suggest(req: SuggestReq):
 @router.post("/log_choice")
 def log_choice(req: LogChoiceReq):
     # Store chosen reply so it rises to the top over time
+    print(f"📊 User chose: {repr(req.text)} (context: {req.context}, intent: {req.intent})")
     store.bump(req.context, req.intent, req.text, delta=1)
     store.save()
     return {"ok": True}
