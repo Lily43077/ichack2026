@@ -60,7 +60,7 @@ Use these as inspiration but generate fresh, contextually appropriate options.
 
     prompt = f"""You are helping generate reply options for a speech-assistance app. The user has difficulty speaking and needs quick tap-to-speak responses.
 
-Generate exactly 9 short reply options for the user to tap.
+Generate exactly 9 short reply options for the user to tap. Do not add preamble to your response, get straight to the point with no additions.
 
 Rules:
 - Exactly 9 replies
@@ -69,7 +69,7 @@ Rules:
 - No emojis
 - No numbering, no bullet points
 - One reply per line
-- Replies should be things the USER would say (not the other person)
+- Replies should be the USER's possible replies (not the conversation partner)
 - Replies should not be AI preamble
 - Consider the conversation flow and what would be a natural next response
 

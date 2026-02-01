@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from .models import SuggestReq, SuggestRes, SuggestItem, LogChoiceReq
+from .models import SuggestReq, SuggestRes, SuggestItem, LogChoiceReq, ClearHistoryReq
 from .intents import classify_intent
 from .phrasepacks import PHRASEPACKS
 from .claude import generate_replies
@@ -85,4 +85,11 @@ def log_choice(req: LogChoiceReq):
     # Update conversation history with the chosen reply
     history.update_last_exchange_with_choice(req.session_id, req.text)
     
+    return {"ok": True}
+
+@router.post("/clear_history")
+def clear_history(req: ClearHistoryReq):
+    # Clear conversation history for this session
+    print(f"🧹 Clearing history for session: {req.session_id}")
+    history.clear_session(req.session_id)
     return {"ok": True}

@@ -65,29 +65,26 @@
       </div>
 
       <div class="tab-content active" id="contextualTab">
-        <div class="custom-reply-container">
-          <input type="text" id="customReplyContextual" class="custom-reply-input" placeholder="Type a custom reply...">
-          <button class="orate-btn" id="orateContextual" title="Speak this reply">🔊</button>
-        </div>
-        
         <div class="buttons-grid" id="contextualButtons"></div>
         
-        <div class="refresh-container">
-          <button class="refresh-btn" id="refreshBtn">
-            <span>🔄</span>
-            <span>Refresh</span>
-          </button>
-          <span class="refresh-text">Generate new contextual suggestions based on the conversation</span>
+        <div class="bottom-controls">
+          <div class="custom-reply-container">
+            <input type="text" id="customReplyContextual" class="custom-reply-input" placeholder="Type custom reply...">
+            <button class="orate-btn" id="orateContextual" title="Speak">🔊</button>
+          </div>
+          <button class="refresh-btn" id="refreshBtn" title="Refresh suggestions">🔄</button>
         </div>
       </div>
 
       <div class="tab-content" id="genericTab">
-        <div class="custom-reply-container">
-          <input type="text" id="customReplyGeneric" class="custom-reply-input" placeholder="Type a custom reply...">
-          <button class="orate-btn" id="orateGeneric" title="Speak this reply">🔊</button>
-        </div>
-        
         <div class="buttons-grid" id="genericButtons"></div>
+        
+        <div class="bottom-controls">
+          <div class="custom-reply-container">
+            <input type="text" id="customReplyGeneric" class="custom-reply-input" placeholder="Type custom reply...">
+            <button class="orate-btn" id="orateGeneric" title="Speak">🔊</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

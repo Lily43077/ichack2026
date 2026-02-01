@@ -355,52 +355,6 @@ body {
   box-shadow: 0 6px 12px -4px rgba(78, 205, 196, 0.5), var(--shadow);
 }
 
-.refresh-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding: 1.5rem;
-  background: var(--surface);
-  border: 3px dashed var(--text-light);
-  border-radius: 16px;
-}
-
-.refresh-btn {
-  background: var(--accent);
-  color: var(--text);
-  border: 3px solid var(--text);
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  font-family: 'Syne', sans-serif;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.refresh-btn:hover {
-  background: var(--text);
-  color: var(--surface);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-
-.refresh-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.refresh-text {
-  color: var(--text-light);
-  font-size: 0.9rem;
-  flex: 1;
-}
-
 .loading-spinner {
   display: inline-block;
   width: 1rem;
@@ -470,13 +424,13 @@ body {
 
 .recording-toggle {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 90px;
-  height: 90px;
+  top: 1rem;
+  right: 1rem;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: var(--error);
-  border: 4px solid var(--surface);
+  border: 3px solid var(--surface);
   box-shadow: var(--shadow-lg);
   cursor: pointer;
   display: flex;
@@ -489,8 +443,8 @@ body {
 .recording-toggle::after {
   content: '';
   position: absolute;
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   background: white;
   border-radius: 50%;
   transition: all 0.3s;
@@ -501,8 +455,8 @@ body {
 }
 
 .recording-toggle.recording::after {
-  width: 26px;
-  height: 26px;
+  width: 18px;
+  height: 18px;
   border-radius: 4px;
 }
 
@@ -511,8 +465,8 @@ body {
 }
 
 .recording-toggle.paused::after {
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
 }
 
@@ -609,76 +563,95 @@ body {
     font-size: 1rem;
   }
 
+  .bottom-controls {
+    flex-wrap: wrap;
+  }
+
   .custom-reply-container {
-    flex-direction: column;
-  }
-
-  .custom-reply-input {
     width: 100%;
   }
 
-  .orate-btn {
-    width: 100%;
+  .refresh-btn {
+    width: auto;
   }
 }
 
-/* Custom Reply Input */
-.custom-reply-container {
+/* Bottom Controls - Custom Reply + Refresh */
+.bottom-controls {
   display: flex;
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background: var(--surface);
-  border: 3px solid var(--text);
-  border-radius: 16px;
+  margin-top: 1.5rem;
+  align-items: center;
+}
+
+.custom-reply-container {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
   align-items: center;
 }
 
 .custom-reply-input {
   flex: 1;
-  padding: 1rem 1.25rem;
+  padding: 1.25rem 1.25rem;
   border: 2px solid var(--text-light);
   border-radius: 12px;
   font-size: 1.1rem;
   font-family: 'Public Sans', sans-serif;
   transition: all 0.2s;
-  background: var(--bg);
+  background: var(--surface);
 }
 
 .custom-reply-input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1);
 }
 
 .custom-reply-input::placeholder {
   color: var(--text-light);
-  font-style: italic;
 }
 
 .orate-btn {
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   background: var(--secondary);
   color: var(--text);
-  border: 3px solid var(--text);
+  border: 2px solid var(--text);
   border-radius: 12px;
   font-size: 1.5rem;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 60px;
 }
 
 .orate-btn:hover {
   background: var(--primary);
   color: white;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
 }
 
-.orate-btn:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow);
+.refresh-btn {
+  padding: 1.25rem 1.5rem;
+  background: var(--accent);
+  color: var(--text);
+  border: 2px solid var(--text);
+  border-radius: 12px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresh-btn:hover {
+  background: var(--text);
+  color: var(--surface);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

@@ -86,6 +86,17 @@ customContext.addEventListener('input', (e) => {
 });
 
 startBtn.addEventListener('click', () => {
+  // Clear transcript when starting a new session
+  transcript = '';
+  console.log('🧹 Transcript cleared for new session');
+  
+  // Clear contextual buttons
+  contextualButtons.innerHTML = '';
+  console.log('🧹 Contextual buttons cleared');
+  
+  // Clear backend history for this session
+  clearBackendHistory();
+  
   showScreen('record');
   recordEmoji.textContent = selectedContext.emoji;
   const displayLabel = selectedContext.additionalContext 
@@ -94,6 +105,20 @@ startBtn.addEventListener('click', () => {
   recordContext.textContent = displayLabel;
   speechContextLabel.textContent = displayLabel;
 });
+
+// Clear backend history
+async function clearBackendHistory() {
+  try {
+    await fetch(`${API_BASE}/clear_history`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: sessionId })
+    });
+    console.log('🧹 Backend history cleared');
+  } catch (error) {
+    console.error('Failed to clear backend history:', error);
+  }
+}
 
 // Recording functionality
 recordBtn.addEventListener('click', () => {
@@ -278,7 +303,7 @@ function initGenericButtons() {
 // Contextual buttons refresh
 refreshBtn.addEventListener('click', async () => {
   refreshBtn.disabled = true;
-  refreshBtn.innerHTML = '<span class="loading-spinner"></span><span>Loading...</span>';
+  refreshBtn.textContent = '⏳';
   
   try {
     const suggestions = await fetchSuggestions();
@@ -288,7 +313,7 @@ refreshBtn.addEventListener('click', async () => {
     showStatus('Failed to fetch suggestions', 'error');
   } finally {
     refreshBtn.disabled = false;
-    refreshBtn.innerHTML = '<span>🔄</span><span>Refresh</span>';
+    refreshBtn.textContent = '🔄';
   }
 });
 

@@ -22,3 +22,6 @@ class LogChoiceReq(BaseModel):
     context: str
     intent: str
     text: str
+
+class ClearHistoryReq(BaseModel):
+    session_id: str

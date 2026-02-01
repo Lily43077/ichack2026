@@ -133,5 +133,61 @@
     ],
     "created_at": "2026-02-01T02:43:50.911059",
     "updated_at": "2026-02-01T02:44:38.433213"
+  },
+  "d0296c23-b759-4bad-a22a-1a3e19198487": {
+    "context": "shopping",
+    "exchanges": [
+      {
+        "timestamp": "2026-02-01T03:02:09.994853",
+        "transcript": "  I would like to buy fruit ",
+        "chosen_reply": "I'm looking for fresh, high-quality fruit."
+      },
+      {
+        "timestamp": "2026-02-01T03:02:26.981506",
+        "transcript": "  I would like to buy fruit Could you please show me the options? I'm looking for fresh, high-quality fruit. ",
+        "chosen_reply": "Could you tell me about the different varieties?"
+      },
+      {
+        "timestamp": "2026-02-01T03:03:01.973571",
+        "transcript": "  I would like to buy fruit Could you please show me the options? I'm looking for fresh, high-quality fruit.       I'm interested in seasonal, ripe produce. Do you have bananas Could you tell me about the different varieties? ",
+        "chosen_reply": "Could you describe the flavors of the different fruits?"
+      },
+      {
+        "timestamp": "2026-02-01T03:03:22.302984",
+        "transcript": "  I would like to buy fruit Could you please show me the options? I'm looking for fresh, high-quality fruit.       I'm interested in seasonal, ripe produce. Do you have bananas Could you tell me about the different varieties? Could you describe the flavors of the different fruits? ",
+        "chosen_reply": null
+      }
+    ],
+    "created_at": "2026-02-01T03:02:09.994835",
+    "updated_at": "2026-02-01T03:03:22.302996"
+  },
+  "0ebcd03f-d18d-4903-9a64-40fcfc2a57c8": {
+    "context": "shopping",
+    "exchanges": [
+      {
+        "timestamp": "2026-02-01T03:04:51.926067",
+        "transcript": "I would like to buy some fruit ",
+        "chosen_reply": "I'm interested in the organic produce section. Can you assist?"
+      },
+      {
+        "timestamp": "2026-02-01T03:05:00.156766",
+        "transcript": "I would like to buy some fruit I'm interested in the organic produce section. Can you assist? ",
+        "chosen_reply": "Yes, I'd be happy to help you find some organic fruit."
+      }
+    ],
+    "created_at": "2026-02-01T03:04:51.926053",
+    "updated_at": "2026-02-01T03:05:03.063967"
+  },
+  "bf451223-ac61-43e7-a972-3bcd85686395": {
+    "context": "others",
+    "exchanges": [
+      {
+        "timestamp": "2026-02-01T03:07:37.268838",
+        "transcript": "I am feeling sad ",
+        "chosen_reply": null
+      }
+    ],
+    "created_at": "2026-02-01T03:07:37.268818",
+    "updated_at": "2026-02-01T03:07:37.268841"
   }
 }
