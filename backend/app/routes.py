@@ -10,7 +10,7 @@ router = APIRouter()
 
 def _fallback(intent: str) -> list[str]:
     pack = PHRASEPACKS.get(intent) or PHRASEPACKS["generic"]
-    return pack[:6]
+    return pack[:9]
 
 @router.post("/suggest", response_model=SuggestRes)
 def suggest(req: SuggestReq):
@@ -59,7 +59,7 @@ def suggest(req: SuggestReq):
     scored.sort(reverse=True, key=lambda x: x[0])
 
     print("\n📤 SENDING RESPONSE:")
-    for i, (score, reply_text) in enumerate(scored[:6]):
+    for i, (score, reply_text) in enumerate(scored[:9]):
         print(f"  {i+1}. [{score:.2f}] {reply_text}")
     print("=" * 60 + "\n")
 
@@ -70,7 +70,7 @@ def suggest(req: SuggestReq):
             intent=intent,
             score=float(score),
         )
-        for i, (score, reply_text) in enumerate(scored[:6])
+        for i, (score, reply_text) in enumerate(scored[:9])
     ])
 
 @router.post("/log_choice")

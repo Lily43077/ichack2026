@@ -25,5 +25,113 @@
     ],
     "created_at": "2026-02-01T02:26:56.985765",
     "updated_at": "2026-02-01T02:27:21.160436"
+  },
+  "25b7944f-a9a7-4789-97b4-b530b0d2405e": {
+    "context": "medical",
+    "exchanges": [
+      {
+        "timestamp": "2026-02-01T02:32:15.402362",
+        "transcript": "hi it is I really hi it is I really    although that just  although that just hello hello hello Maybe Maybe I don't know my name hello Hello my name is No hello ",
+        "chosen_reply": "Hello, may I have a burrito bowl please"
+      },
+      {
+        "timestamp": "2026-02-01T02:33:18.104136",
+        "transcript": "hi it is I really hi it is I really    although that just  although that just hello hello hello Maybe Maybe I don't know my name hello Hello my name is No hello Hello, may I have a burrito bowl please ",
+        "chosen_reply": "Yes, a burrito bowl would be great."
+      },
+      {
+        "timestamp": "2026-02-01T02:33:25.674764",
+        "transcript": "hi it is I really hi it is I really    although that just  although that just hello hello hello Maybe Maybe I don't know my name hello Hello my name is No hello Hello, may I have a burrito bowl please Yes, a burrito bowl would be great. ",
+        "chosen_reply": "Thank you, I'll have the burrito bowl."
+      },
+      {
+        "timestamp": "2026-02-01T02:33:55.394923",
+        "transcript": "hi it is I really hi it is I really    although that just  although that just hello hello hello Maybe Maybe I don't know my name hello Hello my name is No hello Hello, may I have a burrito bowl please Yes, a burrito bowl would be great. Could you repeat that, please? Thank you, I'll have the burrito",
+        "chosen_reply": "I'd like to add a side of rice."
+      },
+      {
+        "timestamp": "2026-02-01T02:34:00.742097",
+        "transcript": "hi it is I really hi it is I really    although that just  although that just hello hello hello Maybe Maybe I don't know my name hello Hello my name is No hello Hello, may I have a burrito bowl please Yes, a burrito bowl would be great. Could you repeat that, please? Thank you, I'll have the burrito",
+        "chosen_reply": "That's perfect, thank you."
+      },
+      {
+        "timestamp": "2026-02-01T02:34:07.589998",
+        "transcript": "hi it is I really hi it is I really    although that just  although that just hello hello hello Maybe Maybe I don't know my name hello Hello my name is No hello Hello, may I have a burrito bowl please Yes, a burrito bowl would be great. Could you repeat that, please? Thank you, I'll have the burrito",
+        "chosen_reply": "And can I get a side of beans as well?"
+      },
+      {
+        "timestamp": "2026-02-01T02:34:21.361943",
+        "transcript": "hi it is I really hi it is I really    although that just  although that just hello hello hello Maybe Maybe I don't know my name hello Hello my name is No hello Hello, may I have a burrito bowl please Yes, a burrito bowl would be great. Could you repeat that, please? Thank you, I'll have the burrito",
+        "chosen_reply": "Hello, I am here for the doctor's appointment"
+      },
+      {
+        "timestamp": "2026-02-01T02:37:48.012533",
+        "transcript": "hi it is I really hi it is I really    although that just  although that just hello hello hello Maybe Maybe I don't know my name hello Hello my name is No hello Hello, may I have a burrito bowl please Yes, a burrito bowl would be great. Could you repeat that, please? Thank you, I'll have the burrito",
+        "chosen_reply": null
+      }
+    ],
+    "created_at": "2026-02-01T02:32:15.402304",
+    "updated_at": "2026-02-01T02:37:48.012545"
+  },
+  "575afca0-5fa1-452c-9d87-e91df4972ddb": {
+    "context": "medical",
+    "exchanges": [
+      {
+        "timestamp": "2026-02-01T02:40:38.528189",
+        "transcript": "Hello, I am here for the doctor's appointment ",
+        "chosen_reply": "Please call 999."
+      },
+      {
+        "timestamp": "2026-02-01T02:40:56.619899",
+        "transcript": "Hello, I am here for the doctor's appointment Please call 999. ",
+        "chosen_reply": null
+      }
+    ],
+    "created_at": "2026-02-01T02:40:38.528178",
+    "updated_at": "2026-02-01T02:40:56.619909"
+  },
+  "0b7ffd56-743a-4a63-b61d-c17975b70b0e": {
+    "context": "medical",
+    "exchanges": [
+      {
+        "timestamp": "2026-02-01T02:41:43.863068",
+        "transcript": "Hello, I am here for the doctor's appointment ",
+        "chosen_reply": "I might have a cough"
+      },
+      {
+        "timestamp": "2026-02-01T02:41:56.134099",
+        "transcript": "Hello, I am here for the doctor's appointment I am not feeling well. I might have a cough ",
+        "chosen_reply": null
+      }
+    ],
+    "created_at": "2026-02-01T02:41:43.863054",
+    "updated_at": "2026-02-01T02:41:56.134113"
+  },
+  "bc15312e-5ba2-4ba4-84a9-0845be50ca80": {
+    "context": "medical",
+    "exchanges": [
+      {
+        "timestamp": "2026-02-01T02:43:50.911092",
+        "transcript": "I am here for the doctor's appointment ",
+        "chosen_reply": "I'm feeling a bit nervous."
+      },
+      {
+        "timestamp": "2026-02-01T02:44:09.905668",
+        "transcript": "I am here for the doctor's appointment Please let me know if I need to do anything. I'm happy to answer any questions. I'm feeling a bit nervous. ",
+        "chosen_reply": "I have a big lump on my throat is that bad"
+      },
+      {
+        "timestamp": "2026-02-01T02:44:29.080716",
+        "transcript": "I am here for the doctor's appointment Please let me know if I need to do anything. I'm happy to answer any questions. I'm feeling a bit nervous. I'll do my best to answer any questions. I'm here if you have any other requests. I have a big lump on my throat is that bad ",
+        "chosen_reply": "Please let me know if the lump requires any further testing."
+      },
+      {
+        "timestamp": "2026-02-01T02:44:38.433201",
+        "transcript": "I am here for the doctor's appointment Please let me know if I need to do anything. I'm happy to answer any questions. I'm feeling a bit nervous. I'll do my best to answer any questions. I'm here if you have any other requests. I have a big lump on my throat is that bad Could you please check the lu",
+        "chosen_reply": null
+      }
+    ],
+    "created_at": "2026-02-01T02:43:50.911059",
+    "updated_at": "2026-02-01T02:44:38.433213"
   }
 }

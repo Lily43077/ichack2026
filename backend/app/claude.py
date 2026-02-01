@@ -60,16 +60,17 @@ Use these as inspiration but generate fresh, contextually appropriate options.
 
     prompt = f"""You are helping generate reply options for a speech-assistance app. The user has difficulty speaking and needs quick tap-to-speak responses.
 
-Generate exactly 6 short reply options for the user to tap.
+Generate exactly 9 short reply options for the user to tap.
 
 Rules:
-- Exactly 6 replies
+- Exactly 9 replies
 - Each reply under 18 words
 - Polite, neutral, clear
 - No emojis
 - No numbering, no bullet points
 - One reply per line
 - Replies should be things the USER would say (not the other person)
+- Replies should not be AI preamble
 - Consider the conversation flow and what would be a natural next response
 
 Context: {context}
@@ -77,13 +78,13 @@ Context: {context}
 {common_replies_section}
 Current message heard: "{message}"
 
-Generate 6 appropriate replies the user could say next:"""
+Generate 9 appropriate replies the user could say next:"""
 
     print(f"📝 Prompt being sent to Claude:\n{prompt}\n")
 
     res = client.messages.create(
         model="claude-3-haiku-20240307",
-        max_tokens=220,
+        max_tokens=350,
         temperature=0.6,
         messages=[{"role": "user", "content": prompt}],
     )
@@ -91,7 +92,7 @@ Generate 6 appropriate replies the user could say next:"""
     text = res.content[0].text.strip()
     lines = _clean_lines(text)
 
-    if len(lines) < 6:
-        raise ValueError(f"Claude returned <6 lines: {lines}")
+    if len(lines) < 9:
+        raise ValueError(f"Claude returned <9 lines: {lines}")
 
-    return lines[:6]
+    return lines[:9 ]
